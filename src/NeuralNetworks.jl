@@ -1,6 +1,9 @@
 module NeuralNetworks
 
-include("types.jl")
+include("example.jl")
+include("network.jl")
+include("eachlayer.jl")
+include("estimator.jl")
 include("backpropagator.jl")
 include("sgd.jl")
 
