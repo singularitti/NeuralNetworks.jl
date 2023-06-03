@@ -1,17 +1,13 @@
-export Backpropagator
+export backpropagate
 
-struct Backpropagator
-    network::Network
-    activation::Activation
-end
-
-(back::Backpropagator)(example::Example) = back(example.x, example.y)
-function (back::Backpropagator)(𝘅, 𝘆)
-    f, f′ = instantiate(back.activation)
+backpropagate(network::Network, activation::Activation, example::Example) =
+    backpropagate(network, activation, example.x, example.y)
+function backpropagate(network::Network, activation::Activation, 𝘅, 𝘆)
+    f, f′ = instantiate(activation)
     # Feed forward
     zs, activations = Vector{Float64}[], Vector{Float64}[𝘅]
     𝗮 = 𝘅
-    for (_, wˡ, 𝗯ˡ) in excludeinput(eachlayer(back.network))
+    for (_, wˡ, 𝗯ˡ) in excludeinput(eachlayer(network))
         𝘇ˡ = wˡ * 𝗮 .+ 𝗯ˡ
         push!(zs, 𝘇ˡ)
         𝗮 = f.(𝘇ˡ)
@@ -23,7 +19,7 @@ function (back::Backpropagator)(𝘅, 𝘆)
     𝝯w, 𝝯𝗯 = [kron(𝝳, activations[end - 1]')], [𝝳]  # 𝝯wᴸ, 𝝯𝗯ᴸ
     # Select `network` from layer L to 3, `zs` from layer L-1 to 2, `activations` from layer L-2 to 1
     for ((_, wˡ⁺¹, _), 𝘇ˡ, 𝗮ˡ⁻¹) in zip(
-        Iterators.reverse(excludeinput(eachlayer(back.network))),
+        Iterators.reverse(excludeinput(eachlayer(network))),
         zs[(end - 1):-1:begin],
         activations[(end - 2):-1:begin],
     )
