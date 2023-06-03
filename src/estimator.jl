@@ -1,15 +1,12 @@
 using Statistics: mean
 
-struct Estimator{F}
-    network::Network
-    f::F
-end
-function (estimator::Estimator)(data::AbstractVector{Example})
+export estimate
+
+function estimate(network::Network, activation::Activation, data::AbstractVector{Example})
+    f, _ = instantiate(activation)
     hits =
-        sum(
-            argmax(estimator.network(estimator.f, example.x)) == argmax(example.y) for
-            example in data
-        ) / length(data)
-    loss = mean(estimator.network(estimator.f, example) for example in data)
+        sum(argmax(network(f, example.x)) == argmax(example.y) for example in data) /
+        length(data)
+    loss = mean(network(f, example) for example in data)
     return (hits=hits, loss=loss)
 end
