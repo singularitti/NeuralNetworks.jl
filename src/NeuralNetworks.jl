@@ -1,5 +1,7 @@
 module NeuralNetworks
 
-# Write your package code here.
+include("types.jl")
+include("backpropagator.jl")
+include("sgd.jl")
 
 end
