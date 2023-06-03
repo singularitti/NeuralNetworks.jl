@@ -33,7 +33,3 @@ function (back::Backpropagator)(𝘅, 𝘆)
     end
     return reverse(𝝯w), reverse(𝝯𝗯)
 end
-
-sigmoid(z) = 1 / (1 + exp(-z))
-
-sigmoid′(z) = sigmoid(z) * (1 - sigmoid(z))
