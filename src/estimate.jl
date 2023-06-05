@@ -1,6 +1,6 @@
 using Statistics: mean
 
-export estimate
+export MeanSquaredError, estimate
 
 abstract type Loss end
 struct MeanSquaredError <: Loss end
