@@ -16,12 +16,8 @@ function Network(layers)
 end
 Network(layers::Integer...) = Network(layers)
 
-(network::Network)(f, data::Example) = network(f, data.x, data.y)
-(network::Network)(f, 𝘅) = feedforward(f, network.weights, network.biases, 𝘅)
-function (network::Network)(f, 𝘅, 𝘆)
-    𝘆̂ = network(f, 𝘅)
-    return sum(abs2, 𝘆 .- 𝘆̂)
-end
+(network::Network)(f, 𝘅::AbstractVector) =
+    feedforward(f, network.weights, network.biases, 𝘅)
 
 function feedforward(f, weights, biases, 𝗮)
     for (w, 𝗯) in zip(weights, biases)
