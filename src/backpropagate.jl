@@ -3,8 +3,8 @@ export backpropagate
 function backpropagate(network::Network, activation::Activation, example::Example)
     𝘅, 𝘆 = unwrap(example)
     f, f′ = instantiate(activation)
-    # Feed forward
     zs, activations = Vector{Float64}[], Vector{Float64}[𝘅]
+    # Feed forward
     𝗮 = 𝘅
     for (_, wˡ, 𝗯ˡ) in excludeinput(eachlayer(network))
         𝘇ˡ = wˡ * 𝗮 .+ 𝗯ˡ
