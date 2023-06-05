@@ -5,6 +5,11 @@ export estimate
 abstract type Loss end
 struct MeanSquaredError <: Loss end
 
+struct Estimation
+    hits::Float64
+    loss::Float64
+end
+
 function computeloss(f::Activation, network::Network, example::Example, ::MeanSquaredError)
     𝘅, 𝘆 = unwrap(example)
     𝘆̂ = network(f, 𝘅)
@@ -16,5 +21,5 @@ function estimate(f::Activation, network::Network, data::AbstractVector{Example}
         sum(argmax(network(f, example.x)) == argmax(example.y) for example in data) /
         length(data)
     loss = mean(computeloss(f, network, example, l) for example in data)
-    return (hits=hits, loss=loss)
+    return Estimation(hits, loss)
 end
