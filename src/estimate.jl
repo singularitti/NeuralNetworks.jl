@@ -11,10 +11,12 @@ function computeloss(f::Activation, network::Network, example::Example, ::MeanSq
     return sum(abs2, 𝘆 .- 𝘆̂)
 end
 
-function estimate(f::Activation, network::Network, data::AbstractVector{Example})
+function estimate(
+    f::Activation, network::Network, data::AbstractVector{Example}, l::LossFunction
+)
     hits =
         sum(argmax(network(f, example.x)) == argmax(example.y) for example in data) /
         length(data)
-    loss = mean(computeloss(f, network, example) for example in data)
+    loss = mean(computeloss(f, network, example, l) for example in data)
     return (hits=hits, loss=loss)
 end
