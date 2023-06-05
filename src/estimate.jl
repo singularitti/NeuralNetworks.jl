@@ -13,7 +13,7 @@ end
 function computeloss(f::Activation, network::Network, example::Example, ::MeanSquaredError)
     𝘅, 𝘆 = unwrap(example)
     𝘆̂ = network(f, 𝘅)
-    return sum(abs2, 𝘆 .- 𝘆̂)
+    return mean(abs2, 𝘆 .- 𝘆̂) / 2
 end
 
 function estimate(f::Activation, network::Network, data::AbstractVector{<:Example}, l::Loss)
