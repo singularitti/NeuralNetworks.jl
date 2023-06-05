@@ -4,8 +4,8 @@ using Random: shuffle
 export train!
 
 function train!(
+    f::Activation,
     network::Network,
-    activation::Activation,
     data::AbstractVector{Example},
     batchsize::Integer,
     η,
@@ -15,14 +15,14 @@ function train!(
         data = shuffle(data)
         batches = Iterators.partition(data, batchsize)
         for batch in batches
-            train!(network, activation, batch, η)
+            train!(f, network, batch, η)
         end
     end
     return network
 end
-function train!(network::Network, activation::Activation, batch::AbstractVector{Example}, η)
+function train!(f::Activation, network::Network, batch::AbstractVector{Example}, η)
     new_networks = collect(
-        train(network, activation, example, η / length(batch)) for example in batch
+        train(f, network, example, η / length(batch)) for example in batch
     )
     new_weights = (
         mean(new_network.weights[i] for new_network in new_networks) for
@@ -39,16 +39,16 @@ function train!(network::Network, activation::Activation, batch::AbstractVector{
     end
     return network
 end
-function train!(network::Network, activation::Activation, example::Example, η)
-    𝝯w, 𝝯𝗯 = backpropagate(network, activation, example)
+function train!(f::Activation, network::Network, example::Example, η)
+    𝝯w, 𝝯𝗯 = backpropagate(f, network, example)
     for (w, 𝗯, ∇w, ∇𝗯) in zip(network.weights, network.biases, 𝝯w, 𝝯𝗯)
         w[:, :] .-= η * ∇w
         𝗯[:] .-= η * ∇𝗯
     end
     return network
 end
-function train(network::Network, activation::Activation, example::Example, η)
-    𝝯w, 𝝯𝗯 = backpropagate(network, activation, example)
+function train(f::Activation, network::Network, example::Example, η)
+    𝝯w, 𝝯𝗯 = backpropagate(f, network, example)
     new_network = deepcopy(network)
     for (w, 𝗯, ∇w, ∇𝗯) in zip(new_network.weights, new_network.biases, 𝝯w, 𝝯𝗯)
         w[:, :] .-= η * ∇w
