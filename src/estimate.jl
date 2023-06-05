@@ -2,7 +2,10 @@ using Statistics: mean
 
 export estimate
 
-function (network::Network)(f, example::Example)
+abstract type LossFunction end
+struct MeanSquaredError <: LossFunction end
+
+function computeloss(f::Activation, network::Network, example::Example, ::MeanSquaredError)
     𝘅, 𝘆 = unwrap(example)
     𝘆̂ = network(f, 𝘅)
     return sum(abs2, 𝘆 .- 𝘆̂)
