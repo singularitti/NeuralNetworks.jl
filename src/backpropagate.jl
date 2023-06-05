@@ -1,8 +1,7 @@
 export backpropagate
 
-backpropagate(network::Network, activation::Activation, example::Example) =
-    backpropagate(network, activation, example.x, example.y)
-function backpropagate(network::Network, activation::Activation, 𝘅, 𝘆)
+function backpropagate(network::Network, activation::Activation, example::Example)
+    𝘅, 𝘆 = unwrap(example)
     f, f′ = instantiate(activation)
     # Feed forward
     zs, activations = Vector{Float64}[], Vector{Float64}[𝘅]
