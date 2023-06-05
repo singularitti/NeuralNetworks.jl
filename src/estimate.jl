@@ -16,7 +16,7 @@ function computeloss(f::Activation, network::Network, example::Example, ::MeanSq
     return sum(abs2, 𝘆 .- 𝘆̂)
 end
 
-function estimate(f::Activation, network::Network, data::AbstractVector{Example}, l::Loss)
+function estimate(f::Activation, network::Network, data::AbstractVector{<:Example}, l::Loss)
     hits =
         sum(argmax(network(f, example.x)) == argmax(example.y) for example in data) /
         length(data)

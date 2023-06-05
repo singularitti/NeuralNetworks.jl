@@ -6,7 +6,7 @@ export train!
 function train!(
     f::Activation,
     network::Network,
-    data::AbstractVector{Example},
+    data::AbstractVector{<:Example},
     batchsize::Integer,
     η,
     nepochs=1,
@@ -20,7 +20,7 @@ function train!(
     end
     return network
 end
-function train!(f::Activation, network::Network, batch::AbstractVector{Example}, η)
+function train!(f::Activation, network::Network, batch::AbstractVector{<:Example}, η)
     new_networks = collect(
         train(f, network, example, η / length(batch)) for example in batch
     )
