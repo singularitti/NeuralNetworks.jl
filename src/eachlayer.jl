@@ -10,6 +10,8 @@ hidden(iter::EachLayer) = (iter[i] for i in (firstindex(iter) + 1):(lastindex(it
 
 excludeinput(iter::EachLayer) = (iter[i] for i in (firstindex(iter) + 1):lastindex(iter))
 
+excludeoutput(iter::EachLayer) = (iter[i] for i in firstindex(iter):(lastindex(iter) - 1))
+
 # See https://github.com/JuliaLang/julia/blob/1715110/base/strings/string.jl#L207-L213
 function Base.iterate(iter::EachLayer, state=firstindex(iter))
     if state == firstindex(iter)
