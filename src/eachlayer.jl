@@ -8,9 +8,9 @@ eachlayer(network::Network) = EachLayer(network)
 
 hidden(iter::EachLayer) = (iter[i] for i in (firstindex(iter) + 1):(lastindex(iter) - 1))
 
-excludeinput(iter::EachLayer) = (iter[i] for i in (firstindex(iter) + 1):lastindex(iter))
+skipinput(iter::EachLayer) = (iter[i] for i in (firstindex(iter) + 1):lastindex(iter))
 
-excludeoutput(iter::EachLayer) = (iter[i] for i in firstindex(iter):(lastindex(iter) - 1))
+skipoutput(iter::EachLayer) = (iter[i] for i in firstindex(iter):(lastindex(iter) - 1))
 
 # See https://github.com/JuliaLang/julia/blob/1715110/base/strings/string.jl#L207-L213
 function Base.iterate(iter::EachLayer, state=firstindex(iter))

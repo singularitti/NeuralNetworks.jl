@@ -21,7 +21,7 @@ end
 
 function init!(network::Network, scheme::WeightInitialization)
     layers = eachlayer(network)
-    for ((nₒᵤₜ, weight, _), (nᵢₙ, _, _)) in zip(excludeinput(layers), excludeoutput(layers))
+    for ((nₒᵤₜ, weight, _), (nᵢₙ, _, _)) in zip(skipinput(layers), skipoutput(layers))
         weight[:] = randweight(nₒᵤₜ, nᵢₙ, scheme)
     end
     return network

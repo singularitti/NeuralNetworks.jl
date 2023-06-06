@@ -6,7 +6,7 @@ function backpropagate(f::Activation, network::Network, example::Example)
     zs, activations = Vector{Float64}[], Vector{Float64}[𝘅]
     # Feed forward
     𝗮 = 𝘅
-    for (_, wˡ, 𝗯ˡ) in excludeinput(eachlayer(network))
+    for (_, wˡ, 𝗯ˡ) in skipinput(eachlayer(network))
         𝘇ˡ = wˡ * 𝗮 .+ 𝗯ˡ
         push!(zs, 𝘇ˡ)
         𝗮 = f.(𝘇ˡ)
@@ -18,7 +18,7 @@ function backpropagate(f::Activation, network::Network, example::Example)
     𝝯w, 𝝯𝗯 = [kron(𝝳, activations[end - 1]')], [𝝳]  # 𝝯wᴸ, 𝝯𝗯ᴸ
     # Select `network` from layer L to 3, `zs` from layer L-1 to 2, `activations` from layer L-2 to 1
     for ((_, wˡ⁺¹, _), 𝘇ˡ, 𝗮ˡ⁻¹) in zip(
-        Iterators.reverse(excludeinput(eachlayer(network))),
+        Iterators.reverse(skipinput(eachlayer(network))),
         zs[(end - 1):-1:begin],
         activations[(end - 2):-1:begin],
     )
