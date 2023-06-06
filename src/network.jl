@@ -9,10 +9,9 @@ export Network, feedforward
 end
 function Network(layers)
     weights = Tuple(
-        Matrix{Float64}(undef, nⱼ, nₖ) for
-        (nⱼ, nₖ) in zip(layers[(begin + 1):end], layers[begin:(end - 1)])
-    )
-    biases = Tuple(Vector{Float64}(undef, nⱼ) for nⱼ in layers[(begin + 1):end])
+        zeros(nⱼ, nₖ) for (nⱼ, nₖ) in zip(layers[(begin + 1):end], layers[begin:(end - 1)])
+    )  # Do not use `undef` here, as it will be added and subtracted from!
+    biases = Tuple(zeros(nⱼ) for nⱼ in layers[(begin + 1):end])  # # Do not use `undef` here!
     return Network{length(layers)}(layers, weights, biases)
 end
 Network(layers::Integer...) = Network(layers)
