@@ -1,7 +1,15 @@
 module MNIST
 
 using MLDatasets: MLDatasets
-using NeuralNetworks: Example
+if isdefined(Base, :get_extension)
+    using NeuralNetworks
+    using NeuralNetworks: Example
+    import NeuralNetworks: loaddata
+else
+    using ..NeuralNetworks
+    using ..NeuralNetworks: Example
+    import ..NeuralNetworks: loaddata
+end
 
 export loaddata
 

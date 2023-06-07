@@ -9,4 +9,10 @@ include("estimate.jl")
 include("backpropagate.jl")
 include("sgd.jl")
 
+function loaddata end
+
+if !isdefined(Base, :get_extension)
+    include("../ext/MNIST.jl")
+end
+
 end
