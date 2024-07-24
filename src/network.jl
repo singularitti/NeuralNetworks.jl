@@ -11,7 +11,7 @@ function Network(layers)
     weights = Tuple(
         zeros(nⱼ, nₖ) for (nⱼ, nₖ) in zip(layers[(begin + 1):end], layers[begin:(end - 1)])
     )  # Do not use `undef` here, as it will be added and subtracted from!
-    biases = Tuple(zeros(nⱼ) for nⱼ in layers[(begin + 1):end])  # # Do not use `undef` here!
+    biases = Tuple(zeros(nⱼ) for nⱼ in layers[(begin + 1):end])  # Do not use `undef` here!
     return Network{length(layers)}(layers, weights, biases)
 end
 Network(layers::Integer...) = Network(layers)
