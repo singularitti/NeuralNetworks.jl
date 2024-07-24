@@ -7,7 +7,7 @@ include("eachlayer.jl")
 include("initialization.jl")
 include("estimate.jl")
 include("backpropagate.jl")
-include("sgd.jl")
+include("train.jl")
 
 function loaddata end
 
