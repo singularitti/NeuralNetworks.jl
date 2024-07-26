@@ -4,7 +4,7 @@ struct EachLayer{N}
     network::N
 end
 
-eachlayer(network::Network) = EachLayer(network)
+eachlayer(network::MultilayerPerceptron) = EachLayer(network)
 
 hidden(iter::EachLayer) = (iter[i] for i in (firstindex(iter) + 1):(lastindex(iter) - 1))
 
@@ -48,7 +48,7 @@ Base.firstindex(::EachLayer) = 1
 Base.lastindex(X::EachLayer) = length(X)
 
 Base.show(io::IO, iter::EachLayer) = print(io, summary(iter))
-function Base.show(io::IO, ::MIME"text/plain", network::Network)
+function Base.show(io::IO, ::MIME"text/plain", network::MultilayerPerceptron)
     print(io, "Network of size ", join(network.layers, "×"))
     return nothing
 end

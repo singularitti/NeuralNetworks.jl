@@ -1,4 +1,4 @@
-network = Network(784, 30, 10)
+network = MultilayerPerceptron(784, 30, 10)
 # init!(network, GlorotNormal())
 init!(network, GlorotUniform())
 train_data = loaddata(:train);

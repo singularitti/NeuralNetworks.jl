@@ -19,7 +19,7 @@ function randweight(nₒᵤₜ, nᵢₙ, ::GlorotUniform)
     return rand(nₒᵤₜ, nᵢₙ) * 2r .- r
 end
 
-function init!(network::Network, scheme::WeightInitialization)
+function init!(network::MultilayerPerceptron, scheme::WeightInitialization)
     layers = eachlayer(network)
     for ((nₒᵤₜ, weight, _), (nᵢₙ, _, _)) in zip(skipinput(layers), skipoutput(layers))
         weight[:] = randweight(nₒᵤₜ, nᵢₙ, scheme)

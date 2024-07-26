@@ -14,7 +14,7 @@ y_samples = sin.(x_samples) .+ rand(rng, Normal(0.0, 0.3), N_SAMPLES);
 𝐲 = map(y -> [y], y_samples);
 train_data = [Example(x, y) for (x, y) in zip(𝐱, 𝐲)];
 
-network = Network(1, 10, 10, 10, 1)
+network = MultilayerPerceptron(1, 10, 10, 10, 1)
 init!(network, GlorotNormal())
 train!(SigmoidActivation(), network, train_data, 10, LEARNING_RATE, length(epochs))
 𝐲′ = [only(network(SigmoidActivation(), x)) for x in 𝐱]

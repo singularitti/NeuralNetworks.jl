@@ -1,6 +1,6 @@
 export backpropagate
 
-function backpropagate(f::Activation, network::Network, example::Example)
+function backpropagate(f::Activation, network::MultilayerPerceptron, example::Example)
     𝘅, 𝘆 = unwrap(example)
     f′ = derivativeof(f)
     zs, activations = Vector{Float64}[], Vector{Float64}[𝘅]

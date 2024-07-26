@@ -5,7 +5,7 @@ export train!
 
 function train!(
     f::Activation,
-    network::Network,
+    network::MultilayerPerceptron,
     data::AbstractVector{<:Example},
     batchsize::Integer,
     η,
@@ -20,7 +20,9 @@ function train!(
     end
     return network
 end
-function train!(f::Activation, network::Network, batch::AbstractVector{<:Example}, η)
+function train!(
+    f::Activation, network::MultilayerPerceptron, batch::AbstractVector{<:Example}, η
+)
     new_networks = collect(
         train(f, network, example, η / length(batch)) for example in batch
     )
@@ -39,7 +41,7 @@ function train!(f::Activation, network::Network, batch::AbstractVector{<:Example
     end
     return network
 end
-function train!(f::Activation, network::Network, example::Example, η)
+function train!(f::Activation, network::MultilayerPerceptron, example::Example, η)
     𝝯w, 𝝯𝗯 = backpropagate(f, network, example)
     for (w, 𝗯, ∇w, ∇𝗯) in zip(network.weights, network.biases, 𝝯w, 𝝯𝗯)
         w[:, :] .-= η * ∇w
@@ -47,7 +49,7 @@ function train!(f::Activation, network::Network, example::Example, η)
     end
     return network
 end
-function train(f::Activation, network::Network, example::Example, η)
+function train(f::Activation, network::MultilayerPerceptron, example::Example, η)
     𝝯w, 𝝯𝗯 = backpropagate(f, network, example)
     new_network = deepcopy(network)
     for (w, 𝗯, ∇w, ∇𝗯) in zip(new_network.weights, new_network.biases, 𝝯w, 𝝯𝗯)

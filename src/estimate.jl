@@ -10,13 +10,17 @@ struct Estimation
     loss::Float64
 end
 
-function computeloss(f::Activation, network::Network, example::Example, ::MeanSquaredError)
+function computeloss(
+    f::Activation, network::MultilayerPerceptron, example::Example, ::MeanSquaredError
+)
     𝘅, 𝘆 = unwrap(example)
     𝘆̂ = network(f, 𝘅)
     return mean(abs2, 𝘆 .- 𝘆̂) / 2
 end
 
-function estimate(f::Activation, network::Network, data::AbstractVector{<:Example}, l::Loss)
+function estimate(
+    f::Activation, network::MultilayerPerceptron, data::AbstractVector{<:Example}, l::Loss
+)
     hits = mean(argmax(network(f, example.x)) == argmax(example.y) for example in data)
     loss = mean(computeloss(f, network, example, l) for example in data)
     return Estimation(hits, loss)
