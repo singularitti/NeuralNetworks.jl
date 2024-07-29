@@ -17,11 +17,12 @@ function MultilayerPerceptron(layers, activations)
     )
 end
 
-(network::MultilayerPerceptron)(f, 𝘅) = feedforward(f, network.weights, network.biases, 𝘅)
+(network::MultilayerPerceptron)(𝘅) =
+    feedforward(network.weights, network.biases, network.activations, 𝘅)
 
-function feedforward(f, weights, biases, 𝗮)
-    for (w, 𝗯) in zip(weights, biases)
-        𝗮 = f.(w * 𝗮 .+ 𝗯)
+function feedforward(weights, biases, activations, 𝗮)
+    for (w, 𝗯, activation) in zip(weights, biases, activations)
+        𝗮 = activation.(w * 𝗮 .+ 𝗯)
     end
     return 𝗮
 end
