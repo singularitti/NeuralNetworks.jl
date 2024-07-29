@@ -4,7 +4,6 @@ using Random: shuffle
 export train!
 
 function train!(
-    f::Activation,
     network::MultilayerPerceptron,
     data::AbstractVector{<:Example},
     batchsize::Integer,
@@ -15,17 +14,13 @@ function train!(
         data = shuffle(data)
         batches = Iterators.partition(data, batchsize)
         for batch in batches
-            train!(f, network, batch, η)
+            train!(network, batch, η)
         end
     end
     return network
 end
-function train!(
-    f::Activation, network::MultilayerPerceptron, batch::AbstractVector{<:Example}, η
-)
-    new_networks = collect(
-        train(f, network, example, η / length(batch)) for example in batch
-    )
+function train!(network::MultilayerPerceptron, batch::AbstractVector{<:Example}, η)
+    new_networks = collect(train(network, example, η / length(batch)) for example in batch)
     new_weights = (
         mean(new_network.weights[i] for new_network in new_networks) for
         i in 1:length(network.weights)
@@ -41,16 +36,16 @@ function train!(
     end
     return network
 end
-function train!(f::Activation, network::MultilayerPerceptron, example::Example, η)
-    𝝯w, 𝝯𝗯 = backpropagate(f, network, example)
+function train!(network::MultilayerPerceptron, example::Example, η)
+    𝝯w, 𝝯𝗯 = backpropagate(network, example)
     for (w, 𝗯, ∇w, ∇𝗯) in zip(network.weights, network.biases, 𝝯w, 𝝯𝗯)
         w[:, :] .-= η * ∇w
         𝗯[:] .-= η * ∇𝗯
     end
     return network
 end
-function train(f::Activation, network::MultilayerPerceptron, example::Example, η)
-    𝝯w, 𝝯𝗯 = backpropagate(f, network, example)
+function train(network::MultilayerPerceptron, example::Example, η)
+    𝝯w, 𝝯𝗯 = backpropagate(network, example)
     new_network = deepcopy(network)
     for (w, 𝗯, ∇w, ∇𝗯) in zip(new_network.weights, new_network.biases, 𝝯w, 𝝯𝗯)
         w[:, :] .-= η * ∇w
