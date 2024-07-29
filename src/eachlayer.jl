@@ -1,7 +1,7 @@
 const Maybe{T} = Union{T,Nothing}
 
-struct EachLayer{N}
-    network::N
+struct EachLayer{T}
+    network::T
 end
 
 eachlayer(network::MultilayerPerceptron) = EachLayer(network)
@@ -15,7 +15,7 @@ skipoutput(iter::EachLayer) = (iter[i] for i in firstindex(iter):(lastindex(iter
 # See https://github.com/JuliaLang/julia/blob/1715110/base/strings/string.jl#L207-L213
 function Base.iterate(iter::EachLayer, state=firstindex(iter))
     if state == firstindex(iter)
-        return (first(iter.network.layers), nothing, nothing), state + 1
+        return (first(iter.network.layers), nothing, nothing, nothing), state + 1
     elseif state > length(iter)
         return nothing
     else
@@ -23,12 +23,14 @@ function Base.iterate(iter::EachLayer, state=firstindex(iter))
             iter.network.layers[state],
             iter.network.weights[state - 1],  # Note the index here!
             iter.network.biases[state - 1],  # Note the index here!
+            iter.network.activations[state - 1],  # Note the index here!
         ),
         state + 1
     end
 end
 
-Base.eltype(::EachLayer) = (Int64, Maybe{Matrix{Float64}}, Maybe{Vector{Float64}})
+Base.eltype(::EachLayer{T}) where {T} =
+    (Int64, Maybe{Matrix{Float64}}, Maybe{Vector{Float64}}, Maybe{T.parameters[end]})
 
 Base.length(iter::EachLayer) = length(size(iter))
 
@@ -39,7 +41,9 @@ function Base.getindex(X::EachLayer, i)  # Only works for integers!
     if i == firstindex(X)
         return first(X.network.layers), nothing, nothing
     else
-        return X.network.layers[i], X.network.weights[i - 1], X.network.biases[i - 1]
+        return X.network.layers[i],
+        X.network.weights[i - 1], X.network.biases[i - 1],
+        X.network.activations[i - 1]
     end
 end
 
